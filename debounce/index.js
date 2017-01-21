@@ -3,9 +3,9 @@ function debounce(func, ms) {
     return function() {
         if (!isWaitingToExecute) {
             setTimeout(function() {
-                func();
+                func.apply(this, arguments);
                 isWaitingToExecute = false;
-            }, ms);
+            }.bind(this), ms);  // bind context explicitly
             isWaitingToExecute = true;
         }
     };

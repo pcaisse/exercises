@@ -7,7 +7,7 @@ function findCommandInKeys(obj) {
         var key = keys[i];
         console.log('key', key);
         var value = obj[key];
-        if (['$merge', '$set'].includes(key)) {
+        if (['$merge', '$set', '$push', '$unshift', '$merge', '$apply', '$splice'].includes(key)) {
             console.log('found key!', key);
             return key;
         } else if (isObject(value)) {
@@ -56,7 +56,29 @@ function setValueInObj(objA, objB) {
     }
 }
 var FUNCS = {
-    $set: setValueInObj
+    $set: setValueInObj,
+    $push: function(a, b) {
+        return a.concat(b['$push']);
+    },
+    $unshift: function(a, b) {
+        return b['$unshift'].concat(a);
+    },
+    $merge: function(a, b) {
+        return Object.assign(a, b['$merge']);
+    },
+    $apply: function(param, funcObj) {
+        var func = funcObj['$apply'];
+        return func(param);
+    },
+    $splice: function(a, b) {
+        // Note: would use the spread operator here and simply call Array.prototype.splice() if using ES6
+        var spliceArgs = b['$splice'][0];
+        var startIndex = spliceArgs[0];
+        var deleteCount = spliceArgs[1];
+        var itemToAdd = spliceArgs[2];
+        a.splice(startIndex, deleteCount, itemToAdd);
+        return a;
+    }
 };
 function update(state, commands) {
     var command = findCommandInKeys(commands);

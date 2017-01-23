@@ -50,7 +50,7 @@ function transmitter(options, callback) {
     var durations = [];
 
     message.split('').forEach(function(letter, letterIndex) {
-        if (!Object.keys(codes).includes(letter) && letter !== SPACE) {
+        if (!Object.keys(codes).indexOf(letter) === -1 && letter !== SPACE) {
             throw new Error('Letter missing from codes: ', letter);
         }
 

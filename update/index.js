@@ -14,7 +14,7 @@ function findCommandInKeys(obj) {
         if (safeHasOwnProperty(obj, key)) {
             console.log('key', key);
             var value = obj[key];
-            if (['$merge', '$set', '$push', '$unshift', '$merge', '$apply', '$splice'].includes(key)) {
+            if (['$merge', '$set', '$push', '$unshift', '$merge', '$apply', '$splice'].indexOf(key) !== -1) {
                 console.log('found key!', key);
                 return key;
             } else if (isObject(value)) {
